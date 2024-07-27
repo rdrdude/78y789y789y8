@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>File Encrypter & Decrypter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #BECAD8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            user-select: none;
+            color: #000;
+        }
+
+        ::selection {
+            background-color: #95A1B2;
+            color: #fff;
+        }
+
+        h2 {
+            border-bottom: 2px solid #95A1B2;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        input[type="file"],
+        input[type="password"],
+        input[type="text"],
+        button {
+            background-color: #BECAD8;
+            padding: 10px;
+            margin-bottom: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #95A1B2;
+            border-radius: 10px;
+        }
+
+        input[type="password"]:focus {
+            outline: none;
+        }
+
+        .password-container {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .password-container input[type="password"],
+        .password-container input[type="text"] {
+            flex-grow: 1;
+            margin-right: 5px;
+        }
+
+        .password-container button {
+            flex-shrink: 0;
+            width: auto;
+            height: auto;
+            padding: 10px;
+        }
+
+        input[type="file"]::file-selector-button {
+            cursor: pointer;
+            background-color: #B3BECC;
+            color: #000;
+            width: auto;
+            height: 24px;
+            padding-left: 5px;
+            padding-right: 5px;
+            border: solid 1px #95A1B2;
+            border-radius: 3px;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            border: solid 1px #848F9E;
+        }
+
+        input[type="file"]::file-selector-button:active {
+            border: solid 1px #6D7682;
+        }
+
+        button {
+            background-color: #95A1B2;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+        button:hover {
+            background-color: #808A99;
+        }
+
+        button:active {
+            color: #000;
+        }
+
+        .section {
+            background-color: #CED8E5;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            min-width: 400px;
+            max-width: 600px;
+        }
+
+        .section2 {
+            background-color: #95A1B2;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: auto;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #95A1B2;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #BECAD8;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #95A1B2;
+            border-radius: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #808A99;
+        }
+
+        @media (max-width: 400px) {
+            .password-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .password-container input[type="password"],
+            .password-container input[type="text"] {
+                margin-bottom: 5px;
+            }
+
+            .password-container button {
+                margin-top: 5px;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                
+            }
+
+            .section {
+                min-width: 100px;
+                max-width: 600px;
+            }
+
+            .section2 {
+                
+            }
+
+            h2 {
+                font-size: 1.2em;
+                padding-bottom: 8px;
+                margin-bottom: 15px;
+            }
+
+            input[type="file"],
+            input[type="password"],
+            input[type="text"],
+            button {
+                padding: 8px;
+                margin-bottom: 8px;
+            }
+
+            button {
+                font-size: 0.9em;
+            }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #35393F;
+                color: #f4f4f4;
+            }
+
+            ::selection {
+                background-color: #202226;
+                color: #000;
+            }
+
+            h2 {
+                border-bottom: 2px solid #202226;
+            }
+
+            .section {
+                background-color: #454B51;
+            }
+
+            .section2 {
+                background-color: #202226;
+            }
+
+            button {
+                background-color: #202226;
+            }
+
+            button:hover {
+                background-color: #151619;
+            }
+
+            #themeToggle {
+                background-color: #003B7A;
+            }
+
+            #themeToggle:hover {
+                background-color: #003163;
+            }
+
+            #copythepassword {
+                background-color: #003B7A;
+            }
+
+            #copythepassword:hover {
+                background-color: #003163;
+            }
+
+            .toast {
+                background-color: #202226;
+            }
+
+            input[type="password"] {
+                background-color: #35393F;
+                color: #f4f4f4;
+                border: 1px solid #202226;
+            }
+
+            input[type="text"] {
+                background-color: #35393F;
+                color: #f4f4f4;
+                border: 1px solid #202226;
+            }
+
+            input[type="file"] {
+                background-color: #35393F;
+                color: #f4f4f4;
+                border: 1px solid #202226;
+            }
+
+            input[type="file"]::file-selector-button {
+                background-color: #2B2E33;
+                color: white;
+                border: solid 1px #202226;
+            }
+
+            input[type="file"]::file-selector-button:hover {
+                border: solid 1px #1A1B1E;
+            }
+
+            input[type="file"]::file-selector-button:active {
+                border: solid 1px #111214;
+            }
+
+            ::-webkit-scrollbar {
+                width: 12px;
+            }
+
+            ::-webkit-scrollbar-track {
+                background: #35393F;
+            }
+
+            ::-webkit-scrollbar-thumb {
+                background: #202226;
+                border-radius: 6px;
+            }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: #151619;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="section2">
+        <div class="section">
+            <h2>Password</h2>
+            <div class="password-container">
+                <input type="password" id="Password" placeholder="Password" oninput="checkPasswordStrength()">
+                <button type="button" id="togglePassword" onclick="togglePasswordVisibility()">Show</button>
+            </div>
+            <div id="passwordStrength"></div>
+        </div>
+
+        <div class="section">
+            <h2>Decryption</h2>
+            <input type="file" id="decryptFileInput">
+            <button onclick="decryptFile()">Decrypt</button>
+        </div>
+
+        <div class="section">
+            <h2>Encryption</h2>
+            <input type="file" id="encryptFileInput">
+            <button onclick="encryptFile()">Encrypt</button>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('Password');
+            const toggleButton = document.getElementById('togglePassword');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleButton.textContent = 'Hide';
+            } else {
+                passwordInput.type = 'password';
+                toggleButton.textContent = 'Show';
+            }
+        }
+
+        function checkPasswordStrength() {
+            const password = document.getElementById('Password').value;
+            const strengthText = document.getElementById('passwordStrength');
+            const strength = calculatePasswordStrength(password);
+
+            strengthText.textContent = `Password strength: ${strength}`;
+        }
+
+        function calculatePasswordStrength(password) {
+            if (password.length < 8) {
+                return 'Too short';
+            }
+            const patterns = [/[A-Z]/, /[a-z]/, /[0-9]/, /[^A-Za-z0-9]/];
+            const matches = patterns.reduce((count, pattern) => pattern.test(password) ? count + 1 : count, 0);
+
+            switch (matches) {
+                case 4:
+                    return 'Strong';
+                case 3:
+                    return 'Medium';
+                case 2:
+                    return 'Weak';
+                default:
+                    return 'Very Weak';
+            }
+        }
+
+        let toastQueue = [];
+        let isToastShowing = false;
+
+        function showToast(message) {
+            toastQueue.push(message);
+            displayNextToast();
+        }
+
+        function displayNextToast() {
+            if (isToastShowing || toastQueue.length === 0) return;
+
+            const toast = document.getElementById('toast');
+            toast.textContent = toastQueue.shift();
+            toast.style.opacity = '1';
+            isToastShowing = true;
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                isToastShowing = false;
+
+                if (toastQueue.length > 0) {
+                    setTimeout(displayNextToast, 300);
+                }
+            }, 3000);
+        }
+
+        function clearToast() {
+            const toast = document.getElementById('toast');
+            toast.style.opacity = '0';
+            isToastShowing = false;
+
+            setTimeout(() => {
+                toast.textContent = '';
+                toastQueue = [];
+            }, 300);
+        }
+
+        document.addEventListener('keydown', function (event) {
+            if (event.ctrlKey && event.key === 'c') {
+                clearToast();
+                return;
+            }
+
+            if (event.ctrlKey && event.key === 'C') {
+                clearToast();
+                return;
+            }
+        });
+
+        function clearPassword() {
+            ResetPasswordTB();
+
+            document.getElementById('Password').value = '';
+            showToast('Password cleared!');
+        }
+
+        function ResetPasswordTB() {
+            /* Reset the password textbox to hidden */
+            const passwordInput = document.getElementById('Password');
+            const toggleButton = document.getElementById('togglePassword');
+            /* Check if password input is currently showing */
+            if (passwordInput.type === 'text') {
+                togglePasswordVisibility(); /* Switch to hidden */
+            }
+            /* Reset the password textbox to hidden */
+
+            /* Clear the password strength textbox */
+            const strengthText = document.getElementById('passwordStrength');
+            strengthText.textContent = '';
+            /* Clear the password strength textbox */
+        }
+
+        function clearFileInput(identifier) {
+            let fileInput;
+
+            if (identifier === 'DECRYPT') {
+                fileInput = document.getElementById('decryptFileInput');
+            } else if (identifier === 'ENCRYPT') {
+                fileInput = document.getElementById('encryptFileInput');
+            } else {
+                console.error('Invalid identifier provided for clearFileInput.');
+                return;
+            }
+
+            if (fileInput) {
+                fileInput.value = '';
+                showToast(`File input (${identifier}) cleared!`);
+            } else {
+                console.error(`File input (${identifier}) not found.`);
+            }
+        }
+
+        async function deriveKey(password, salt, usage) {
+            const baseKey = await window.crypto.subtle.importKey(
+                "raw", new TextEncoder().encode(password), { name: "PBKDF2" }, false, ["deriveKey"]
+            );
+            return window.crypto.subtle.deriveKey(
+                { name: "PBKDF2", salt: salt, iterations: 100000, hash: "SHA-256" },
+                baseKey,
+                { name: "AES-CBC", length: 256 },
+                true,
+                usage
+            );
+        }
+
+        async function decryptFile() {
+            try {
+                const fileInput = document.getElementById('decryptFileInput');
+                const password = document.getElementById('Password').value;
+                if (!password) {
+                    showToast('Please enter a decryption password.');
+                    return;
+                }
+                const file = fileInput.files[0];
+                if (!file) {
+                    showToast('Please select a file to decrypt.');
+                    return;
+                }
+                const fileExists = await checkFileExists(file);
+                if (!fileExists) {
+                    showToast('The file does not exist. It may have been deleted or moved.');
+                    return;
+                }
+                showToast('Decryption process started.');
+                const arrayBuffer = await file.arrayBuffer();
+                if (arrayBuffer.byteLength < 16) {
+                    showToast('Invalid file format for decryption.');
+                    return;
+                }
+                const iv = new Uint8Array(arrayBuffer.slice(0, 16));
+                const data = new Uint8Array(arrayBuffer.slice(16));
+                const key = await deriveKey(password, iv, ["decrypt"]);
+                if (!key) {
+                    showToast('Failed to derive decryption key.');
+                    return;
+                }
+                const decryptedData = await window.crypto.subtle.decrypt({ name: "AES-CBC", iv: iv, length: 256 }, key, data);
+                const blob = new Blob([decryptedData], { type: "application/octet-stream" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = file.name.replace(/\.[^/.]+$/, "") + "-DEC(" + generateRandomString(5) + ")" + file.name.match(/\.[^/.]+$/);
+                a.click();
+                URL.revokeObjectURL(url);
+                showToast('File decrypted successfully.');
+                clearPassword();
+                clearFileInput('DECRYPT');
+            } catch (error) {
+                console.error("Error during decryption:", error);
+                showToast('Error during decryption. Please check console for details.');
+            }
+        }
+
+        async function encryptFile() {
+            try {
+                const fileInput = document.getElementById('encryptFileInput');
+                const password = document.getElementById('Password').value;
+                if (!password) {
+                    showToast('Please enter an encryption password.');
+                    return;
+                }
+                const file = fileInput.files[0];
+                if (!file) {
+                    showToast('Please select a file to encrypt.');
+                    return;
+                }
+                const fileExists = await checkFileExists(file);
+                if (!fileExists) {
+                    showToast('The file does not exist. It may have been deleted or moved.');
+                    return;
+                }
+                showToast('Encryption process started.');
+                const arrayBuffer = await file.arrayBuffer();
+                if (arrayBuffer.byteLength === 0) {
+                    showToast('Cannot encrypt an empty file.');
+                    return;
+                }
+                const iv = window.crypto.getRandomValues(new Uint8Array(16));
+                const key = await deriveKey(password, iv, ["encrypt"]);
+                if (!key) {
+                    showToast('Failed to derive encryption key.');
+                    return;
+                }
+                const encryptedData = await window.crypto.subtle.encrypt({ name: "AES-CBC", iv: iv, length: 256 }, key, arrayBuffer);
+                const blob = new Blob([iv, new Uint8Array(encryptedData)], { type: "application/octet-stream" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = file.name.replace(/\.[^/.]+$/, "") + "-ENC(" + generateRandomString(5) + ")" + file.name.match(/\.[^/.]+$/);
+                a.click();
+                URL.revokeObjectURL(url);
+                showToast('File encrypted successfully.');
+                clearPassword();
+                clearFileInput('ENCRYPT');
+            } catch (error) {
+                console.error("Error during encryption:", error);
+                showToast('Error during encryption. Please check console for details.');
+            }
+        }
+
+        async function checkFileExists(file) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(true);
+                reader.onerror = () => resolve(false);
+                reader.readAsArrayBuffer(file);
+            });
+        }
+
+        function generateRandomString(length) {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            return result;
+        }
+    </script>
+</body>
+</html>
